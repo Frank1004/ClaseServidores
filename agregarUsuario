@@ -1,0 +1,58 @@
+#!/bin/bash
+
+#if [ "id -u" != 0 ] ; then
+#echo -e "\n"
+#echo "Necesita tener permisos de root para ejecutar."
+#exit 1
+#fi
+
+#echo -e "\n"
+echo -e "\n"
+echo "Ingrese el nombre del nuevo usuario: "
+read usu
+
+echo -e "\n"
+echo "Ingrese el home directoy (default /home/$usu): "
+read dir
+if [ "$dir" == "" ] ; then
+dir="/home/$usu"
+fi
+echo "Ingrese el grupo: "
+read gru
+
+if [ "$gru" == "" ] ; then
+gru=1000
+fi
+
+echo "Ingrese el shell a utilizar (default /bin/bash): "
+read sh
+if [ "$sh" == "" ] ; then
+sh="/bin/bash"
+fi
+
+clear
+echo "Los datos que usted ha ingresado, son los siguientes:"
+echo "**"
+echo -e "\n"
+echo "Nombre del usuario: $usu"
+echo "Shell por defecto : $sh"
+echo "Directorio home: $dir"
+echo "Grupo del usuario: $gru"
+echo "-------------------------------------------"
+echo "Si los datos son correctos oprima una tecla,"
+echo "En caso contrario pulse Ctrl+C para cancelar"
+read
+
+useradd -d /home/$usu -g $gru -m -s $sh $usu
+
+if [ "$?" != 0 ] ; then
+echo -e "\n"
+echo "Ha ocurrido un error, Verique de nuevo los datos"
+exit 1
+fi
+
+echo -e "\n"
+echo "Ingrese una contraseña para $usu"
+passwd $usu
+echo -e "\n"
+echo "'$usu' fue agregado correctamente"
